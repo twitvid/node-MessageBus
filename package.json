@@ -1,0 +1,23 @@
+{
+	"name":"node-MessageBus",
+	"description":"A client for the MessageBus RESTful API, Version 4",
+	"keywords":["Message Bus","messagebus","email"],
+	"version":"0.0.1",
+	"homepage":"https://github.com/twitvid/node-MessageBus",
+	"author": "Telly.com (http://telly.com)",
+	"contributors": [
+		"John Smart <smart@telly.com> (https://github.com/thesmart)",
+		"Scott Reynolds <scott@telly.com> (https://github.com/SupermanScott)"
+	],
+	"dependencies":{
+		"xdate":"0.7",
+		"q":"0.8.11",
+		"underscore":"1.4.2",
+		"request":"1.2.0"
+	},
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/twitvid/node-MessageBus.git"
+	}
+}
