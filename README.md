@@ -22,9 +22,13 @@ var sender = new BatchSender(client);
 sender.push(messages);
 ```
 
+## Complete and tested:
+
+ * /v4/message/email/send
+ * /v4/stats/email
+
 ## TODO:
 
- * implement: /v4/stats/email
  * implement: /v4/stats/email/channel/%CHANNEL_KEY%
  * implement: /v4/stats/email/channel/%CHANNEL_KEY%/session/%SESSION_KEY%
  * implement: /v4/unsubs
