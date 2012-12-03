@@ -26,10 +26,11 @@ sender.push(messages);
 
  * /v4/message/email/send
  * /v4/stats/email
+ * /v4/channels,
+ * /v4/stats/email/channel/%CHANNEL_KEY%
 
 ## TODO:
 
- * implement: /v4/stats/email/channel/%CHANNEL_KEY%
  * implement: /v4/stats/email/channel/%CHANNEL_KEY%/session/%SESSION_KEY%
  * implement: /v4/unsubs
  * implement: /v4/unsubs/channel/%CHANNEL_KEY%
@@ -37,7 +38,6 @@ sender.push(messages);
  * implement: /v4/complaints/channel/%CHANNEL_KEY%
  * implement: /v4/bounces
  * implement: /v4/bounces/channel/%CHANNEL_KEY%
- * implement: /v4/channels
  * implement: /v4/channel/%CHANNEL_KEY%/config
  * implement: /v4/channel/%CHANNEL_KEY%/sessions
  * implement: /v4/channel/%CHANNEL_KEY%/session/%SESSION_KEY%/rename
