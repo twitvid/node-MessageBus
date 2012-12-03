@@ -47,12 +47,11 @@ sender.flush();
  * /v4/channel/%CHANNEL_KEY%/config
  * /v4/bounces
  * /v4/unsubs
+ * /v4/unsubs/channel/%CHANNEL_KEY%
 
 ## TODO:
 
  * implement: /v4/stats/email/channel/%CHANNEL_KEY%/session/%SESSION_KEY%
- * implement: /v4/unsubs
- * implement: /v4/unsubs/channel/%CHANNEL_KEY%
  * implement: /v4/complaints
  * implement: /v4/complaints/channel/%CHANNEL_KEY%
  * implement: /v4/bounces/channel/%CHANNEL_KEY%

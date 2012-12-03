@@ -29,7 +29,7 @@ describe('client tests:', function() {
 	});
 
 	describe('stats', function() {
-		it('email stats', function(done) {
+		it('getEmailStatsSince', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getEmailStatsSince(3600000, function(err, resp) {
 				assert.ok(!err, err ? err.toString() : "");
@@ -50,8 +50,18 @@ describe('client tests:', function() {
 			});
 		});
 
+		it('getChannelUnsubsSince', function(done) {
+			var client = new MsgBusClient(apiKey);
+			client.getChannelUnsubsSince(channelGuid, 3600000, function(err, resp) {
+				assert.ok(!err, err ? err.toString() : "");
+				assert.equal(200, resp.statusCode);
+				assert.ok(resp.unsubs);
+				done();
+			});
+		});
+
 		// DISABLED: currently timing out
-		it('channel stats', function(done) {
+		it('getChannelStatsSince', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getChannelStatsSince(channelGuid, function(err, resp) {
 				assert.ok(!err, err ? err.toString() : "");
@@ -63,7 +73,7 @@ describe('client tests:', function() {
 			});
 		});
 
-		it('bounces', function(done) {
+		it('getBouncesSince', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getBouncesSince(3600000, function(err, resp) {
 				assert.ok(!err, err ? err.toString() : "");
