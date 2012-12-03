@@ -40,6 +40,16 @@ describe('client tests:', function() {
 			});
 		});
 
+		it('getUnsubsSince', function(done) {
+			var client = new MsgBusClient(apiKey);
+			client.getUnsubsSince(3600000, function(err, resp) {
+				assert.ok(!err, err ? err.toString() : "");
+				assert.equal(200, resp.statusCode);
+				assert.ok(resp.unsubs);
+				done();
+			});
+		});
+
 		// DISABLED: currently timing out
 		it('channel stats', function(done) {
 			var client = new MsgBusClient(apiKey);
