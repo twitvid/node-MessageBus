@@ -19,7 +19,8 @@ if (testOverridesExist) {
 
 
 describe('BatchSender tests:', function() {
-	it('send a small batch', function(done) {
+	// skipped to avoid sending unncessary email
+	it.skip('send a small batch', function(done) {
 		var client = new MsgBusClient(apiKey);
 		var batch = new BatchSender(client);
 

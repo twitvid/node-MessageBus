@@ -17,18 +17,32 @@ if (testOverridesExist) {
 }
 
 
-describe('client tests:', function() {
+describe('MsgBusClient', function() {
 	describe('auth', function() {
 		it('bad api key', function(done) {
 			var client = new MsgBusClient('fake key');
 			client.sendEmailMessage(emailAddress, 'cs@example.com', 'Hello subjective world', {}, function(err, resp) {
-				assert.equal(403, resp.statusCode);
+				assert.ok(err);
 				done();
 			});
 		});
 	});
 
-	describe('stats', function() {
+	// skipped to prevent sending email unnecessarily
+	describe.skip('Sending Email', function() {
+		it('sendEmailMessage', function(done) {
+			var client = new MsgBusClient(apiKey);
+			client.sendEmailMessage(emailAddress, 'cs@example.com', 'Hello subjective world', {}, function(err, resp) {
+				assert.ok(!err, err ? err.toString() : "");
+				assert.equal(202, resp.statusCode);
+				assert.ok(resp.results);
+				assert.equal('number', typeof resp.results.length);
+				done();
+			});
+		});
+	});
+
+	describe('Email Metrics', function() {
 		it('getEmailStatsSince', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getEmailStatsSince(3600000, function(err, resp) {
@@ -40,28 +54,8 @@ describe('client tests:', function() {
 			});
 		});
 
-		it('getUnsubsSince', function(done) {
-			var client = new MsgBusClient(apiKey);
-			client.getUnsubsSince(3600000, function(err, resp) {
-				assert.ok(!err, err ? err.toString() : "");
-				assert.equal(200, resp.statusCode);
-				assert.ok(resp.unsubs);
-				done();
-			});
-		});
-
-		it('getChannelUnsubsSince', function(done) {
-			var client = new MsgBusClient(apiKey);
-			client.getChannelUnsubsSince(channelGuid, 3600000, function(err, resp) {
-				assert.ok(!err, err ? err.toString() : "");
-				assert.equal(200, resp.statusCode);
-				assert.ok(resp.unsubs);
-				done();
-			});
-		});
-
 		// DISABLED: currently timing out
-		it('getChannelStatsSince', function(done) {
+		it.skip('getChannelStatsSince', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getChannelStatsSince(channelGuid, function(err, resp) {
 				assert.ok(!err, err ? err.toString() : "");
@@ -72,7 +66,9 @@ describe('client tests:', function() {
 				done();
 			});
 		});
+	});
 
+	describe('Bounces', function() {
 		it('getBouncesSince', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getBouncesSince(3600000, function(err, resp) {
@@ -83,7 +79,9 @@ describe('client tests:', function() {
 				done();
 			});
 		});
+	});
 
+	describe('Complaint Processing', function() {
 		it('getComplaintsSince', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getComplaintsSince(3600000, function(err, resp) {
@@ -106,35 +104,35 @@ describe('client tests:', function() {
 		});
 	});
 
-	describe.skip('message/email/send', function() {
-		it('simple send', function(done) {
+	describe('Unsubscribe Requests', function() {
+		it('getUnsubsSince', function(done) {
 			var client = new MsgBusClient(apiKey);
-			client.sendEmailMessage(emailAddress, 'cs@example.com', 'Hello subjective world', {}, function(err, resp) {
+			client.getUnsubsSince(3600000, function(err, resp) {
 				assert.ok(!err, err ? err.toString() : "");
-				assert.equal(202, resp.statusCode);
-				assert.ok(resp.results);
-				assert.equal('number', typeof resp.results.length);
+				assert.equal(200, resp.statusCode);
+				assert.ok(resp.unsubs);
+				done();
+			});
+		});
+
+		it('getChannelUnsubsSince', function(done) {
+			var client = new MsgBusClient(apiKey);
+			client.getChannelUnsubsSince(channelGuid, 3600000, function(err, resp) {
+				assert.ok(!err, err ? err.toString() : "");
+				assert.equal(200, resp.statusCode);
+				assert.ok(resp.unsubs);
 				done();
 			});
 		});
 	});
 
-	describe('channels tests:', function() {
+	describe('Separating Mail Streams (Channels)', function() {
 		it('getChannels', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getChannels(function(err, resp) {
 				assert.ok(!err, err ? err.toString() : "");
 				assert.equal(200, resp.statusCode);
 				assert.equal('number', typeof resp.results.length);
-				done();
-			});
-		});
-
-		it('getChannelSessions', function(done) {
-			var client = new MsgBusClient(apiKey);
-			client.getChannelSessions(channelGuid, function(err, resp) {
-				assert.ok(!err, err ? err.toString() : "");
-				assert.equal(200, resp.statusCode);
 				done();
 			});
 		});
@@ -148,5 +146,17 @@ describe('client tests:', function() {
 				done();
 			});
 		});
+
+		// timing out
+		it.skip('getChannelSessions', function(done) {
+			var client = new MsgBusClient(apiKey);
+			client.getChannelSessions(channelGuid, function(err, resp) {
+				assert.ok(!err, err ? err.toString() : "");
+				assert.equal(200, resp.statusCode);
+				done();
+			});
+		});
+
+
 	});
 });
