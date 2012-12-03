@@ -41,13 +41,15 @@ sender.flush();
 ## Complete and tested:
 
  * /v4/message/email/send
+ * /v4/stats/email/channel/%CHANNEL_KEY%
  * /v4/stats/email
- * /v4/channels,
+ * /v4/channels
+ * /v4/channel/%CHANNEL_KEY%/config
  * /v4/bounces
 
 ## TODO:
 
- * fix (currently timing out): /v4/stats/email/channel/%CHANNEL_KEY%
+ * fix: /v4/channel/%CHANNEL_KEY%/sessions
  * implement: /v4/stats/email/channel/%CHANNEL_KEY%/session/%SESSION_KEY%
  * implement: /v4/unsubs
  * implement: /v4/unsubs/channel/%CHANNEL_KEY%

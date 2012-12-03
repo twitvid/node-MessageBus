@@ -32,7 +32,7 @@ describe('client tests:', function() {
 		it('email stats', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getEmailStatsSince(3600000, function(err, resp) {
-				assert.ok(!err, err.toString());
+				assert.ok(!err, err ? err.toString() : "");
 				assert.equal(200, resp.statusCode);
 				assert.ok(resp.stats);
 				assert.equal('number', typeof resp.stats.msgsAttemptedCount);
@@ -44,7 +44,7 @@ describe('client tests:', function() {
 		it('channel stats', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getChannelStatsSince(channelGuid, function(err, resp) {
-				assert.ok(!err, err.toString());
+				assert.ok(!err, err ? err.toString() : "");
 				assert.equal(200, resp.statusCode);
 				console.info(resp);
 //				assert.ok(resp.stats);
@@ -56,7 +56,7 @@ describe('client tests:', function() {
 		it('bounces', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getBouncesSince(3600000, function(err, resp) {
-				assert.ok(!err, err.toString());
+				assert.ok(!err, err ? err.toString() : "");
 				assert.equal(200, resp.statusCode);
 				assert.ok(resp.bounces);
 				assert.equal('number', typeof resp.bounces.length);
@@ -69,7 +69,7 @@ describe('client tests:', function() {
 		it('simple send', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.sendEmailMessage(emailAddress, 'cs@example.com', 'Hello subjective world', {}, function(err, resp) {
-				assert.ok(!err, err.toString());
+				assert.ok(!err, err ? err.toString() : "");
 				assert.equal(202, resp.statusCode);
 				assert.ok(resp.results);
 				assert.equal('number', typeof resp.results.length);
@@ -82,19 +82,28 @@ describe('client tests:', function() {
 		it('getChannels', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getChannels(function(err, resp) {
-				assert.ok(!err, err.toString());
+				assert.ok(!err, err ? err.toString() : "");
 				assert.equal(200, resp.statusCode);
 				assert.equal('number', typeof resp.results.length);
 				done();
 			});
 		});
 
-		it('getSessions', function(done) {
+		it('getChannelSessions', function(done) {
 			var client = new MsgBusClient(apiKey);
-			client.getSessions(channelGuid, function(err, resp) {
-				assert.ok(!err, err.toString());
+			client.getChannelSessions(channelGuid, function(err, resp) {
+				assert.ok(!err, err ? err.toString() : "");
 				assert.equal(200, resp.statusCode);
-				console.info(resp);
+				done();
+			});
+		});
+
+		it('getChannelConfig', function(done) {
+			var client = new MsgBusClient(apiKey);
+			client.getChannelConfig(channelGuid, function(err, resp) {
+				assert.ok(!err, err ? err.toString() : "");
+				assert.equal(200, resp.statusCode);
+				assert.ok(resp.configuration, resp);
 				done();
 			});
 		});
