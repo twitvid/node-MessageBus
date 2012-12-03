@@ -1,5 +1,5 @@
 {
-	"name":"MessageBus",
+	"name":"messagebus",
 	"description":"A client for the MessageBus RESTful API, Version 4",
 	"keywords":["Message Bus","messagebus","email","messagebus client","messagebus api","messagebus email"],
 	"version":"0.0.8",
