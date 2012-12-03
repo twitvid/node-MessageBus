@@ -6,7 +6,7 @@ A client for the MessageBus RESTful API, Version 4
 Get started:
 
 ```
-npm install node-MessageBus
+npm install messagebus
 ```
 
 Send email:
