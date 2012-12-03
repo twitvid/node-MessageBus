@@ -93,6 +93,17 @@ describe('client tests:', function() {
 				done();
 			});
 		});
+
+		// timing out
+		it.skip('getChannelComplaintsSince', function(done) {
+			var client = new MsgBusClient(apiKey);
+			client.getChannelComplaintsSince(3600000, function(err, resp) {
+				assert.ok(!err, err ? err.toString() : "");
+				assert.equal(200, resp.statusCode);
+				assert.ok(resp.complaints);
+				done();
+			});
+		});
 	});
 
 	describe.skip('message/email/send', function() {

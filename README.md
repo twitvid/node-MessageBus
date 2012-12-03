@@ -53,7 +53,7 @@ sender.flush();
 ## TODO:
 
  * implement: /v4/stats/email/channel/%CHANNEL_KEY%/session/%SESSION_KEY%
- * implement: /v4/complaints/channel/%CHANNEL_KEY%
+ * fix: /v4/complaints/channel/%CHANNEL_KEY%
  * implement: /v4/bounces/channel/%CHANNEL_KEY%
  * fix: /v4/channel/%CHANNEL_KEY%/sessions
  * implement: /v4/channel/%CHANNEL_KEY%/session/%SESSION_KEY%/rename
