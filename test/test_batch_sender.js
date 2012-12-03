@@ -19,14 +19,13 @@ if (testOverridesExist) {
 
 
 describe('BatchSender tests:', function() {
-	it('send 2', function(done) {
+	it('send a small batch', function(done) {
 		var client = new MsgBusClient(apiKey);
 		var batch = new BatchSender(client);
 
 		var count = 0;
 		emailAddresses.forEach(function(emailAddress) {
 			batch.push(emailAddress, 'cs@example.com', 'Email Test #' + count, {}, function(err, resp) {
-				console.info(resp);
 				assert.ok(!err);
 				assert.equal(202, resp.statusCode);
 				assert.ok(resp.results);
