@@ -52,6 +52,17 @@ describe('client tests:', function() {
 				done();
 			});
 		});
+
+		it('bounces', function(done) {
+			var client = new MsgBusClient(apiKey);
+			client.getBouncesSince(3600000, function(err, resp) {
+				assert.ok(!err);
+				assert.equal(200, resp.statusCode);
+				assert.ok(resp.bounces);
+				assert.equal("number", typeof resp.bounces.length);
+				done();
+			});
+		});
 	});
 
 	describe.skip('message/email/send', function() {

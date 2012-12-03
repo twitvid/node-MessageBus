@@ -27,16 +27,16 @@ sender.push(messages);
  * /v4/message/email/send
  * /v4/stats/email
  * /v4/channels,
- * /v4/stats/email/channel/%CHANNEL_KEY%
+ * /v4/bounces
 
 ## TODO:
 
+ * fix (currently timing out): /v4/stats/email/channel/%CHANNEL_KEY%
  * implement: /v4/stats/email/channel/%CHANNEL_KEY%/session/%SESSION_KEY%
  * implement: /v4/unsubs
  * implement: /v4/unsubs/channel/%CHANNEL_KEY%
  * implement: /v4/complaints
  * implement: /v4/complaints/channel/%CHANNEL_KEY%
- * implement: /v4/bounces
  * implement: /v4/bounces/channel/%CHANNEL_KEY%
  * implement: /v4/channel/%CHANNEL_KEY%/config
  * implement: /v4/channel/%CHANNEL_KEY%/sessions
