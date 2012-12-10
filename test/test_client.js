@@ -147,7 +147,7 @@ describe('MsgBusClient', function() {
 			});
 		});
 
-		// timing out
+		// error on Messsage bus: "java.io.EOFException: No content to map to Object due to end of input"
 		it.skip('getChannelSessions', function(done) {
 			var client = new MsgBusClient(apiKey);
 			client.getChannelSessions(channelGuid, function(err, resp) {
