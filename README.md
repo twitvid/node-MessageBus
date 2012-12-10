@@ -9,7 +9,7 @@ Get started:
 npm install messagebus
 ```
 
-Send email:
+Send an email:
 
 ```
 // send a single email
@@ -18,13 +18,18 @@ var client = new MsgBusClient(apiKey);
 client.sendEmailMessage("test@example.com", "Customer Service <cs@example.com>", "Hello subjective world");
 ```
 
-Send bulk email, 20 messages at a time:
+To send many emails faster, use BatchSender to maximize throughput:
 
 ```
 var sender = new BatchSender(client);
 messages.forEach(function(msg) {
-	// once 20 messages are pushed, sender automatically sends
-	sender.push(msg.toEmail, "Customer Service <cs@example.com>", "Hello subjective world", function(err, result) {
+	var options = {
+		plaintextBody: msg.plainText,
+		htmlBody: msg.html
+	};
+
+	// server will send a batch of emails together in one HTTP call
+	sender.push(msg.toEmail, "Customer Service <cs@example.com>", msg.subject, options, function(err, result) {
 		// called each time a message is sent
 		if (err) {
 			console.error(err);
@@ -34,7 +39,7 @@ messages.forEach(function(msg) {
 	});
 });
 
-// don't forget to call flush at the end
+// !!don't forget to call flush at the end!!
 sender.flush();
 ```
 
