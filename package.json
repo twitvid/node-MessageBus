@@ -2,7 +2,7 @@
 	"name":"messagebus",
 	"description":"A client for the MessageBus RESTful API, Version 4",
 	"keywords":["Message Bus","messagebus","email","messagebus client","messagebus api","messagebus email"],
-	"version":"0.0.8",
+	"version":"0.0.9",
 	"homepage":"https://github.com/twitvid/node-MessageBus",
 	"author": "Telly.com (http://telly.com)",
 	"contributors": [
