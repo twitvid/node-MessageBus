@@ -2,7 +2,7 @@
 	"name":"messagebus",
 	"description":"A client for the MessageBus RESTful API, Version 4",
 	"keywords":["Message Bus","messagebus","email","messagebus client","messagebus api","messagebus email"],
-	"version":"0.0.9",
+	"version":"0.0.10",
 	"homepage":"https://github.com/twitvid/node-MessageBus",
 	"author": "Telly.com (http://telly.com)",
 	"contributors": [
@@ -10,8 +10,6 @@
 		"Scott Reynolds <scott@telly.com> (https://github.com/SupermanScott)"
 	],
 	"dependencies":{
-		"xdate":"0.7",
-		"q":"0.8.11",
 		"underscore":"1.4.2",
 		"request":"2.12.0"
 	},
