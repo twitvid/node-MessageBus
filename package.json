@@ -1,21 +1,28 @@
 {
-	"name":"messagebus",
-	"description":"A client for the MessageBus RESTful API, Version 4",
-	"keywords":["Message Bus","messagebus","email","messagebus client","messagebus api","messagebus email"],
-	"version":"0.0.10",
-	"homepage":"https://github.com/twitvid/node-MessageBus",
-	"author": "Telly.com (http://telly.com)",
-	"contributors": [
-		"John Smart <smart@telly.com> (https://github.com/thesmart)",
-		"Scott Reynolds <scott@telly.com> (https://github.com/SupermanScott)"
-	],
-	"dependencies":{
-		"underscore":"1.4.2",
-		"request":"2.12.0"
-	},
-	"main": "index.js",
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/twitvid/node-MessageBus.git"
-	}
+  "name": "messagebus",
+  "description": "A client for the MessageBus RESTful API, Version 4",
+  "keywords": [
+    "Message Bus",
+    "messagebus",
+    "email",
+    "messagebus client",
+    "messagebus api",
+    "messagebus email"
+  ],
+  "version": "0.0.11",
+  "homepage": "https://github.com/twitvid/node-MessageBus",
+  "author": "Telly.com (http://telly.com)",
+  "contributors": [
+    "John Smart <smart@telly.com> (https://github.com/thesmart)",
+    "Scott Reynolds <scott@telly.com> (https://github.com/SupermanScott)"
+  ],
+  "dependencies": {
+    "underscore": "1.4.2",
+    "request": "2.12.0"
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/twitvid/node-MessageBus.git"
+  }
 }
