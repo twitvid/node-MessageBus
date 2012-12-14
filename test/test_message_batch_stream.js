@@ -17,11 +17,10 @@ describe('MessageBatchStream', function() {
 		});
 
 		// write 5 messages to the stream
-		global.setTimeout(stream.write.bind(stream, message), 50);
-		global.setTimeout(stream.write.bind(stream, message), 100);
-		global.setTimeout(stream.write.bind(stream, message), 150);
-		global.setTimeout(stream.write.bind(stream, message), 200);
-		global.setTimeout(stream.end.bind(stream, message), 250);
+		for (var i = 0; i < 5; i++) {
+			global.setTimeout(stream.write.bind(stream, message), i * 10);
+		}
+		global.setTimeout(stream.end.bind(stream), 100);
 	});
 
 	it('batch count', function(done) {
@@ -41,12 +40,10 @@ describe('MessageBatchStream', function() {
 		});
 
 		// write 6 messages to the stream
-		global.setTimeout(stream.write.bind(stream, message), 50);
-		global.setTimeout(stream.write.bind(stream, message), 100);
-		global.setTimeout(stream.write.bind(stream, message), 150);
-		global.setTimeout(stream.write.bind(stream, message), 200);
-		global.setTimeout(stream.write.bind(stream, message), 250);
-		global.setTimeout(stream.end.bind(stream, message), 251);
+		for (var i = 0; i < 6; i++) {
+			global.setTimeout(stream.write.bind(stream, message), i * 10);
+		}
+		global.setTimeout(stream.end.bind(stream), 100);
 	});
 
 	it('buffer size', function(done) {
@@ -75,9 +72,10 @@ describe('MessageBatchStream', function() {
 		// write another 18 bytes to the stream after buffer limit
 		assert.ok(!stream.write(message));
 		assert.ok(!stream.write(message));
-		assert.ok(!stream.end(message));
+		assert.ok(!stream.write(message));
 
 		global.setTimeout(function() {
+			assert.equal(6, count);
 			assert.ok(isDrained);
 			done();
 		}, 1000);
