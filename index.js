@@ -1,4 +1,5 @@
 module.exports = {
 	MsgBusClient: require("./lib/client.js"),
-	BatchSender: require("./lib/batch_sender.js")
+	MessageBatchStream: require("./lib/message_batch_stream.js"),
+	MessageSendStream: require("./lib/message_send_stream.js")
 };

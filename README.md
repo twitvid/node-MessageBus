@@ -5,42 +5,48 @@ A client for the MessageBus RESTful API, Version 4
 
 Get started:
 
-```
+```javascript
 npm install messagebus
 ```
 
 Send an email:
 
-```
+```javascript
 // send a single email
 var MsgBusClient = require("MessageBus").MsgBusClient;
 var client = new MsgBusClient(apiKey);
 client.sendEmailMessage("test@example.com", "Customer Service <cs@example.com>", "Hello subjective world");
 ```
 
-To send many emails faster, use BatchSender to maximize throughput:
+To send many emails faster, use the batch method:
 
-```
-var sender = new BatchSender(client);
-messages.forEach(function(msg) {
-	var options = {
-		plaintextBody: msg.plainText,
-		htmlBody: msg.html
-	};
-
-	// server will send a batch of emails together in one HTTP call
-	sender.push(msg.toEmail, "Customer Service <cs@example.com>", msg.subject, options, function(err, result) {
-		// called each time a message is sent
-		if (err) {
-			console.error(err);
-		} else {
-			console.info("message sent:", result);
-		}
-	});
+```javascript
+var MsgBusClient = require("MessageBus").MsgBusClient;
+var client = new MsgBusClient(apiKey);
+client.sendEmailBatch(messages, function(err, resp) {
+	if (err) throw err;
+	console.info('Emails sent:', resp['successCount']);
+	console.info('Emails failed:', resp['failureCount']);
 });
+```
 
-// !!don't forget to call flush at the end!!
-sender.flush();
+Need to send a massive amount of email as fast as possible without running out of memory? Use streams!
+
+```javascript
+var mb = require("MessageBus");
+
+var client = new mb.MsgBusClient(apiKey);
+var batchStream = new mb.MessageBatchStream();
+var sendStream = new mb.MessageSendStream(client);
+
+// ... assume you have an incoming stream of messages to email out
+incomingMsgStream.pipe(batchStream);
+batchStream.pipe(sendStream);
+sendStream.on('close', function() {
+	// done sending!
+	console.info("Emails sent: ", sendStream.successCount);
+	console.info("Emails failed: ", sendStream.failureCount);
+});
 ```
 
 ## Complete and tested:
