@@ -39,4 +39,53 @@ describe('MessageSendStream', function() {
 		}
 		batchStream.end();
 	});
+
+	it('concurrency', function(done) {
+		var message = {
+			'subject': 'foobar'
+		};
+
+		// build a pipeline, Tex!
+		var client = new FakeClient();
+		var batchStream = new MessageBatchStream();
+		var sendStream = new MessageSendStream(client, 1);
+
+		batchStream.pipe(sendStream);
+
+		var isDrain = false;
+		sendStream.on('drain', function() {
+			isDrain = true;
+		});
+
+		sendStream.on('close', function() {
+			assert.ok(isDrain);
+			assert.equal(3, client.callCount);
+			assert.equal(3, pauseCount);
+			assert.equal(2, resumeCount);
+			done();
+		});
+
+		var dataCount = 0;
+		batchStream.on('data', function() {
+			assert.ok(batchStream._isPaused);
+		});
+
+		var pauseCount = 0;
+		batchStream.on('pause', function() {
+			assert.ok(batchStream._isPaused);
+			++pauseCount;
+		});
+
+		var resumeCount = 0;
+		batchStream.on('resume', function() {
+			assert.ok(!batchStream._isPaused);
+			++resumeCount;
+		});
+
+		// queue 100 messages
+		for (var i = 0; i < 103; i++) {
+			batchStream.write(message);
+		}
+		batchStream.end();
+	});
 });
