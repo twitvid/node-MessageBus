@@ -18,9 +18,9 @@ describe('MessageBatchStream', function() {
 
 		// write 5 messages to the stream
 		for (var i = 0; i < 5; i++) {
-			global.setTimeout(stream.write.bind(stream, message), i * 10);
+			stream.write(message);
 		}
-		global.setTimeout(stream.end.bind(stream), 100);
+		stream.end();
 	});
 
 	it('batch count', function(done) {
@@ -41,9 +41,9 @@ describe('MessageBatchStream', function() {
 
 		// write 6 messages to the stream
 		for (var i = 0; i < 6; i++) {
-			global.setTimeout(stream.write.bind(stream, message), i * 10);
+			stream.write(message);
 		}
-		global.setTimeout(stream.end.bind(stream), 100);
+		stream.end();
 	});
 
 	it('buffer size', function(done) {
