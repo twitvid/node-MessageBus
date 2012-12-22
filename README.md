@@ -30,17 +30,23 @@ client.sendEmailBatch(messages, function(err, resp) {
 });
 ```
 
-Need to send a massive amount of email as fast as possible without running out of memory? Use streams!
+Need to send a massive amount of email as fast as possible using [mustache](http://mustache.github.com/) templates? Use streams!
 
 ```javascript
 var mb = require("MessageBus");
 
-var client = new mb.MsgBusClient(apiKey);
+var templateStream = new mb.TemplateStream({
+	html: __dirname + '/templates/html.ms', // html mustache template
+	plain: __dirname + '/templates/plain.ms' // plain-text mustache template
+} /* as a 2nd arg, you can pass default data for each template */);
 var batchStream = new mb.MessageBatchStream();
+
+var client = new mb.MsgBusClient(apiKey);
 var sendStream = new mb.MessageSendStream(client);
 
-// ... assume you have an incoming stream of messages to email out
-incomingMsgStream.pipe(batchStream);
+// ... assume you have an incoming Stream of users to email called "usersToEmailStream" (e.g. text file, etc.)
+usersToEmailStream.pipe(templateStream);
+templateStream.pipe(batchStream);
 batchStream.pipe(sendStream);
 sendStream.on('close', function() {
 	// done sending!
