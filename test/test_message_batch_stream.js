@@ -1,124 +1,121 @@
 // for testing, use http://visionmedia.github.com/mocha/
 
-var MessageBatchStream = require('../lib/message_batch_stream.js');
+var SmartStream = require('smart-stream').SmartStream;
+var MessageBatchStream = require('../index.js').MessageBatchStream;
 var assert = require('assert');
+var util = require('util');
 
+var testData = {
+	"toEmail":"alice@example.com",
+	"toName":"Alice",
+	"subject":"Sample Message with many parameters",
+	"plaintextBody":"This is the plain text body.",
+	"htmlBody":"This is the HTML body.",
+	"fromEmail":"alice@example.com",
+	"fromName":"Test",
+	"sessionKey":"d41d8cd98f00b204e9800998ecf8427e"
+};
+
+function watchEvents(streams, events) {
+	var eventsSeen = [];
+	events.forEach(function(event) {
+		streams.forEach(function(stream) {
+			stream.on(event, function(data) {
+				assert.equal(stream, this, 'Stream event emitted, but scope is not the same as Stream instance');
+				eventsSeen.push([this, event]);
+			});
+		});
+	});
+	return eventsSeen;
+}
+
+function assertSeen(eventsSeen, stream, event) {
+	var isSeen = false;
+	eventsSeen.forEach(function(record) {
+		if (record[0] === stream && record[1] === event) {
+			isSeen = true;
+			return false; // break
+		}
+	});
+	assert.ok(isSeen, 'Event "' + event + '" not seen on Stream "' + stream.name + '"');
+}
+
+function assertNotSeen(eventsSeen, stream, event) {
+	var isSeen = false;
+	eventsSeen.forEach(function(record) {
+		if (record[0] === stream && record[1] === event) {
+			isSeen = true;
+			return false; // break
+		}
+	});
+	assert.ok(!isSeen, 'Event "' + event + '" was not expected on Stream "' + stream.name + '"');
+}
+
+function assertSeenCount(eventsSeen, stream, event, count) {
+	var countSeen = 0;
+	eventsSeen.forEach(function(record) {
+		if (record[0] === stream && record[1] === event) {
+			++countSeen;
+		}
+	});
+	assert.equal(count, countSeen);
+}
 
 describe('MessageBatchStream', function() {
-	it('end flush', function(done) {
-		var message = {
-			'subject': 'foobar'
-		};
+	it('deQueueBatch', function(done) {
+		var mbStream = new MessageBatchStream('mbStream');
+		assert.ok(mbStream.isDrainedFully());
+		assert.deepEqual([], mbStream.deQueueBatch());
 
-		var stream = new MessageBatchStream();
-		stream.on('data', function(batch) {
-			assert.equal(5, batch.length);
+		mbStream.write(testData);
+		assert.ok(mbStream.isDrained());
+		assert.ok(!mbStream.isDrainedFully());
+		assert.deepEqual([testData], mbStream.deQueueBatch());
+		assert.equal(0, mbStream.countBuffer());
+
+		for (var i = 1; i <= 49; i++) {
+			mbStream.write(testData);
+			assert.ok(mbStream.isDrained());
+			assert.equal(i, mbStream.countBuffer());
+		}
+
+		mbStream.on('data', function(batch) {
+			assert.equal(50, batch.length);
 			done();
 		});
-
-		// write 5 messages to the stream
-		for (var i = 0; i < 5; i++) {
-			stream.write(message);
-		}
-		stream.end();
+		mbStream.write(testData);
 	});
 
-	it('batch count', function(done) {
-		var message = {
-			'subject': 'foobar'
-		};
+	it('startDrainCycle', function(done) {
+		var mbStream = new MessageBatchStream('mbStream');
+		mbStream.pause();
 
-		var stream = new MessageBatchStream(2);
-		var count = 0;
-		stream.on('data', function(batch) {
-			assert.equal(2, batch.length);
-			count += batch.length;
+		var eventsSeen = watchEvents([mbStream], ['data','drain','pause','empty']);
 
-			if (count >= 6) {
-				done();
-			}
-		});
-
-		// write 6 messages to the stream
-		for (var i = 0; i < 6; i++) {
-			stream.write(message);
+		for (var i = 1; i <= 500; i++) {
+			mbStream.write(testData);
+			assert.equal(i, mbStream.countBuffer());
 		}
-		stream.end();
-	});
 
-	it('buffer size', function(done) {
-		var message = {
-			'subject': 'foobar'
-		};
-
-		var stream = new MessageBatchStream(1000, 18);
-
-		var count = 0;
-		stream.on('data', function(batch) {
-			assert.equal(6, batch.length);
-			count += batch.length;
+		assertNotSeen(eventsSeen, mbStream, 'data');
+		mbStream.startDrainCycle();
+		mbStream.resume();
+var a = 0;
+		mbStream.on('data', function() {
+			mbStream.pause();
+			var countStuck = mbStream.countBuffer();
+			setTimeout(function() {
+				assert.equal(mbStream.countBuffer(), countStuck);
+				mbStream.resume();
+			}, 10);
+			++a;
 		});
 
-		var isDrained = false;
-		stream.on('drain', function() {
-			isDrained = true;
-		});
-
-		// write 18 bytes to the stream
-		assert.ok(stream.write(message));
-		assert.ok(stream.write(message));
-		assert.ok(stream.write(message));
-
-		// write another 18 bytes to the stream after buffer limit
-		assert.ok(!stream.write(message));
-		assert.ok(!stream.write(message));
-		assert.ok(!stream.write(message));
-
-		global.setTimeout(function() {
-			assert.equal(6, count);
-			assert.ok(isDrained);
+		mbStream.on('empty', function() {
+			assertSeenCount(eventsSeen, mbStream, 'data', 10);
+			assertSeenCount(eventsSeen, mbStream, 'pause', 10);
+			assertSeenCount(eventsSeen, mbStream, 'drain', 10);
 			done();
-		}, 1000);
-	});
-
-	it('pause and resume', function(done) {
-		var message = {
-			'subject': 'foobar'
-		};
-
-		// 2 messages per batch
-		var stream = new MessageBatchStream(2);
-
-		var dataCount = 0;
-		stream.on('data', function(batch) {
-			dataCount += batch.length;
 		});
-
-		var isPause = false;
-		stream.on('pause', function() {
-			isPause = true;
-		});
-
-		var isResume = false;
-		stream.on('resume', function() {
-			isResume = true;
-		});
-
-		stream.write(message);
-		stream.pause();
-		stream.write(message);
-		stream.write(message);
-		stream.write(message);
-
-		global.setTimeout(function() {
-			assert.equal(0, dataCount);
-			stream.resume();
-			global.setTimeout(function() {
-				assert.equal(4, dataCount);
-				assert.ok(isPause);
-				assert.ok(isResume);
-				done();
-			}, 200);
-		}, 200);
 	});
 });

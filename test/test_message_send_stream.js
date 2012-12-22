@@ -57,17 +57,10 @@ describe('MessageSendStream', function() {
 			isDrain = true;
 		});
 
-		sendStream.on('close', function() {
-			assert.ok(isDrain);
-			assert.equal(3, client.callCount);
-			assert.equal(3, pauseCount);
-			assert.equal(2, resumeCount);
-			done();
-		});
-
 		var dataCount = 0;
 		batchStream.on('data', function() {
 			assert.ok(batchStream._isPaused);
+			assert.ok(batchStream.countBuffer() <= 50);
 		});
 
 		var pauseCount = 0;
@@ -80,6 +73,14 @@ describe('MessageSendStream', function() {
 		batchStream.on('resume', function() {
 			assert.ok(!batchStream._isPaused);
 			++resumeCount;
+		});
+
+		sendStream.on('close', function() {
+			assert.ok(isDrain);
+			assert.equal(3, client.callCount);
+			assert.equal(1, pauseCount);
+			assert.equal(0, resumeCount);
+			done();
 		});
 
 		// queue 100 messages
