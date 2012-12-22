@@ -9,7 +9,7 @@
     "messagebus api",
     "messagebus email"
   ],
-  "version": "0.1.7",
+  "version": "0.1.8",
   "homepage": "https://github.com/twitvid/node-MessageBus",
   "author": "Telly.com (http://telly.com)",
   "contributors": [
@@ -20,7 +20,7 @@
     "underscore": "1.4.2",
     "request": "2.12.0",
     "smart-stream": "0.1.x",
-	"mustache":"0.7.1"
+    "mustache": "0.7.1"
   },
   "main": "index.js",
   "repository": {
