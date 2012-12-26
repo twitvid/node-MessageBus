@@ -4,12 +4,12 @@ var assert = require('assert');
 describe('TemplateStream', function() {
 	it('data', function(done) {
 		var ts = new TemplateStream({
-			html: __dirname + '/templates/html.ms',
-			plain: __dirname + '/templates/plain.ms'
-		}, {
 			name: "Default Name",
 			value: "10",
 			in_ca: true
+		}).compileFiles({
+			html: __dirname + '/templates/html.ms',
+			plain: __dirname + '/templates/plain.ms'
 		});
 
 		ts.on('data', function(data) {
