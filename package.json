@@ -9,7 +9,7 @@
     "messagebus api",
     "messagebus email"
   ],
-  "version": "0.1.12",
+  "version": "0.1.13",
   "homepage": "https://github.com/twitvid/node-MessageBus",
   "author": "Telly.com (http://telly.com)",
   "contributors": [
